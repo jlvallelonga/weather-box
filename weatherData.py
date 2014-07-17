@@ -5,9 +5,15 @@ try:
 except ImportError:
     from urllib import urlopen
 
+def getConfigFileDict():
+    f = open("/home/pi/rpi-fun/config.json", "r")
+    fileData = f.read()
+    f.close()
+    return json.loads(fileData)
+
 class WeatherData:
 
-    WEATHER_URL = "https://api.forecast.io/forecast/59ae0eaf99cb6d6f3549b8a75ef343e3/40.008370,-105.267114"
+    WEATHER_URL = getConfigFileDict()['weatherUrl']
 
     def __init__(self):
         self.desc = "ND"
