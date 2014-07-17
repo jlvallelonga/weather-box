@@ -1,0 +1,4 @@
+*.pyc
+data.txt
+errors.txt
+test.py
