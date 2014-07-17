@@ -2,3 +2,5 @@
 data.txt
 errors.txt
 test.py
+config.json
+*.swp
