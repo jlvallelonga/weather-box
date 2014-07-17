@@ -70,6 +70,7 @@ try:
                 myLCD.rightJustifyTextOnLine(date, 1)
                 myLCD.rightJustifyTextOnLine(wd.desc, 2)
                 myLCD.displayWordOnLine(str(int(round(wd.tempF))) + chr(223), 2)
+            updateIteration = updateIteration + 1
             time.sleep(1)
         else:
             print "establishing connection..."
