@@ -65,7 +65,7 @@ try:
             if (updateScreen):
                 myLCD.clearScreen()
                 if (numMessages > 0):
-                    myLCD.displayWordAtPos(str(numMessages), 7)
+                    myLCD.displayWordAtPos(str(numMessages), 8)
                 myLCD.displayWordOnLine(currTime , 1)
                 myLCD.rightJustifyTextOnLine(date, 1)
                 myLCD.rightJustifyTextOnLine(wd.desc, 2)
