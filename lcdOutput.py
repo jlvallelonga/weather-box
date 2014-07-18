@@ -35,7 +35,7 @@ try:
             # get time every 3 seconds
             if (updateIteration % 3 == 0):
                 updateScreen = True
-                nowTime = internetTime.InternetTime.getTime()
+                nowTime = internetTime.getTime()
                 if (nowTime != ""):
                     currTime = nowTime
                 date = getDate()
