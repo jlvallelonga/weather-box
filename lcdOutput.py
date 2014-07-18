@@ -35,7 +35,7 @@ try:
             # get time every 3 seconds
             if (updateIteration % 3 == 0):
                 updateScreen = True
-                nowTime = internetTime.InternetTime.getTime()
+                nowTime = internetTime.getTime()
                 if (nowTime != ""):
                     currTime = nowTime
                 date = getDate()
@@ -65,7 +65,7 @@ try:
             if (updateScreen):
                 myLCD.clearScreen()
                 if (numMessages > 0):
-                    myLCD.displayWordAtPos(str(numMessages), 7)
+                    myLCD.displayWordAtPos(str(numMessages), 8)
                 myLCD.displayWordOnLine(currTime , 1)
                 myLCD.rightJustifyTextOnLine(date, 1)
                 myLCD.rightJustifyTextOnLine(wd.desc, 2)
