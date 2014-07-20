@@ -1,12 +1,14 @@
+import json
 import requests
 
 configFileData = {}
 
 def getConfigFileDict():
+    global configFileData 
     """
     Attempts to cache the config file, and will fetch it if its not cached.
     """
-    if not configFileData:
+    if (not configFileData):
         with open("/home/pi/rpi-fun/config.json", "r") as f:
             configFileData = json.loads(f.read())
             
