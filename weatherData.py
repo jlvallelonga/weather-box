@@ -1,18 +1,20 @@
-import sys
 import json
-try:
-    from urllib.request import urlopen
-except ImportError:
-    from urllib import urlopen
+import requests
+
+configFileData = {}
 
 def getConfigFileDict():
-    f = open("/home/pi/rpi-fun/config.json", "r")
-    fileData = f.read()
-    f.close()
-    return json.loads(fileData)
+    global configFileData 
+    """
+    Attempts to cache the config file, and will fetch it if its not cached.
+    """
+    if (not configFileData):
+        with open("/home/pi/rpi-fun/config.json", "r") as f:
+            configFileData = json.loads(f.read())
+            
+    return configFileData
 
-class WeatherData:
-
+class WeatherData(object):
     WEATHER_URL = getConfigFileDict()['weatherUrl']
 
     def __init__(self):
@@ -23,11 +25,10 @@ class WeatherData:
     def updateData(self):
         #get weather data
         try:
-            allWeatherData = urlopen(self.WEATHER_URL).read()
-            weatherObj = json.loads(allWeatherData)
-            self.desc = weatherObj['currently']['summary']
-            self.tempF = weatherObj['currently']['temperature']
-        except IOError as e:
-            print "IOError: ({0}) {1}".format(e.errno, e.strerror)
-        except:
-            raise
+            res = requests.get(self.WEATHER_URL)
+            if res.status_code == 200:
+                weatherObj = res.json()
+                self.desc = weatherObj['currently']['summary']
+                self.tempF = weatherObj['currently']['temperature']
+        except requests.exceptions.connectionError as e:
+            print "Couldn't connect to weather API: ({0}) {1}".format(e.errno, e.strerror)
