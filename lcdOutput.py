@@ -18,13 +18,18 @@ wd = ""
 date = ""
 updateIteration = 0
 
-
-
 def readDataFile():
     f = open(dataFile, 'r')
     firstLine = f.readline().strip()
     secondLine = f.readline().strip()
     return firstLine
+
+def getTime():
+    now = datetime.datetime.now()
+    hour = int(now.strftime("%I"))
+    period = now.strftime("%p").lower()
+    timeStr = str(hour) + now.strftime(":%M") + period
+    return timeStr
 
 def getDate():
     now = datetime.datetime.now()
@@ -40,12 +45,11 @@ try:
         if myLCD.isConnected():
             updateScreen = False
             # get time every 3 seconds
-            if (updateIteration % 3 == 0):
-                updateScreen = True
-                nowTime = internetTime.getTime()
-                if (nowTime != ""):
-                    currTime = nowTime
-                date = getDate()
+            updateScreen = True
+            nowTime = getTime()
+            if (nowTime != ""):
+                currTime = nowTime
+            date = getDate()
             # get weather data every 90 seconds (960 times a day)
             if (updateIteration % 90 == 0):
                 updateScreen = True
