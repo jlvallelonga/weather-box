@@ -4,7 +4,6 @@ import datetime
 import time
 import lcdCommands as lcd
 import weatherData
-import internetTime
 import lcdDataFileUtils
 import os
 
