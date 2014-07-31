@@ -1,0 +1,35 @@
+#! /bin/sh
+# /etc/init.d/lcd-screen
+
+### BEGIN INIT INFO
+# Provides:          LCD
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: lcd screen - message - print
+# Description:       prints a message to attached LCD screen over GPIO serial
+### END INIT INFO
+
+# If you want a command to always run, put it here
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Hello! running lcd program"
+    sleep 1s
+    python /home/pi/rpi-fun/lcdOutput.py
+    ;;
+  stop)
+    echo "stopping LCD"
+    sleep 1s
+    LCD_PID=`ps auxwww | grep lcdOutput.py | head -1 | awk '{print $2}'`
+    kill -9 LCD_PID
+    ;;
+  *)
+    echo "Usage: /etc/init.d/lcd-screen {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+

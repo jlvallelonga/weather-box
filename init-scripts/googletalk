@@ -1,0 +1,35 @@
+#! /bin/sh
+# /etc/init.d/lcd-screen
+
+### BEGIN INIT INFO
+# Provides:          google talk
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: google talk - messaging
+# Description:       initiates google talk service for home automation
+### END INIT INFO
+
+# If you want a command to always run, put it here
+
+# Carry out specific functions when asked to by the system
+case "$1" in
+  start)
+    echo "Hello! running google talk program"
+    sleep 1s
+    python /home/pi/rpi-fun/googleTalk.py
+    ;;
+  stop)
+    echo "stopping google talk program"
+    sleep 1s
+    GTALK_PID=`ps auxwww | grep googleTalk.py | head -1 | awk '{print $2}'`
+    kill -9 GTALK_PID
+    ;;
+  *)
+    echo "Usage: /etc/init.d/googletalk {start|stop}"
+    exit 1
+    ;;
+esac
+exit 0
+

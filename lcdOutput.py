@@ -6,6 +6,11 @@ import lcdCommands as lcd
 import weatherData
 import internetTime
 import lcdDataFileUtils
+import os
+
+thisDir = os.path.dirname(os.path.realpath(__file__))
+configFile = thisDir + "/config.json"
+dataFile = thisDir + "/data.txt"
 
 numMessages = 0
 currTime = ""
@@ -13,8 +18,10 @@ wd = ""
 date = ""
 updateIteration = 0
 
+
+
 def readDataFile():
-    f = open("/home/pi/rpi-fun/data.txt", 'r')
+    f = open(dataFile, 'r')
     firstLine = f.readline().strip()
     secondLine = f.readline().strip()
     return firstLine
@@ -27,7 +34,7 @@ def getDate():
 logging.basicConfig(level=logging.DEBUG, filename="errors.txt")
 try:
     myLCD = lcd.LCDDisplay()
-    dataFileUtils = lcdDataFileUtils.LCDDataFileUtils("/home/pi/rpi-fun/data.txt")
+    dataFileUtils = lcdDataFileUtils.LCDDataFileUtils(dataFile)
     while 1:
         #try:
         if myLCD.isConnected():

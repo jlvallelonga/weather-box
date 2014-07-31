@@ -1,5 +1,10 @@
 import json
 import requests
+import os
+
+thisDir = os.path.dirname(os.path.realpath(__file__))
+configFile = thisDir + "/config.json"
+dataFile = thisDir + "/data.txt"
 
 configFileData = {}
 
@@ -9,7 +14,7 @@ def getConfigFileDict():
     Attempts to cache the config file, and will fetch it if its not cached.
     """
     if (not configFileData):
-        with open("/home/pi/rpi-fun/config.json", "r") as f:
+        with open(configFile, "r") as f:
             configFileData = json.loads(f.read())
             
     return configFileData
