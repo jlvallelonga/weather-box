@@ -13,7 +13,8 @@ dataFile = thisDir + "/data.txt"
 
 numMessages = 0
 currTime = ""
-wd = ""
+wdDesc = ""
+wdTempF = ""
 date = ""
 updateIteration = 0
 
@@ -40,54 +41,58 @@ try:
     myLCD = lcd.LCDDisplay()
     dataFileUtils = lcdDataFileUtils.LCDDataFileUtils(dataFile)
     while 1:
-        #try:
-        if myLCD.isConnected():
-            updateScreen = False
-            # get time every 3 seconds
-            updateScreen = True
-            nowTime = getTime()
-            if (nowTime != ""):
-                currTime = nowTime
-            date = getDate()
-            # get weather data every 90 seconds (960 times a day)
-            if (updateIteration % 90 == 0):
-                updateScreen = True
-                wd = weatherData.WeatherData()
-            # if there's a loop command the loop the referenced message
-            loopMessage = dataFileUtils.getLoopCommandMessage()
-            if (loopMessage != ""):
-                stopLoop = False
-                while(not(stopLoop)):
+        try:
+            if myLCD.isConnected():
+                updateScreen = False
+                # get time every 3 seconds
+                nowTime = getTime()
+                if (nowTime != currTime):
+                    currTime = nowTime
+                    updateScreen = True
+                date = getDate()
+                # get weather data every 90 seconds (960 times a day)
+                if (updateIteration % 90 == 0):
+                    updateIteration = 0
+                    wd = weatherData.WeatherData()
+                    if (wd.desc != wdDesc or wd.tempF != wdTempF):
+                        wdDesc = wd.desc
+                        wdTempF = wd.tempF
+                        updateScreen = True
+                # if there's a loop command the loop the referenced message
+                loopMessage = dataFileUtils.getLoopCommandMessage()
+                if (loopMessage != ""):
+                    stopLoop = False
+                    while(not(stopLoop)):
+                        myLCD.clearScreen()
+                        myLCD.scrollTextLeftOnLine(loopMessage, 1, 0.2)
+                        stopLoop = dataFileUtils.isStopLoopCommandPresent()
+                # if there's a show command the show the referenced message
+                showMessage = dataFileUtils.getShowCommandMessage()
+                if (showMessage != ""):
                     myLCD.clearScreen()
-                    myLCD.scrollTextLeftOnLine(loopMessage, 1, 0.2)
-                    stopLoop = dataFileUtils.isStopLoopCommandPresent()
-            # if there's a show command the show the referenced message
-            showMessage = dataFileUtils.getShowCommandMessage()
-            if (showMessage != ""):
-                myLCD.clearScreen()
-                myLCD.scrollTextLeftOnLine(showMessage, 1, 0.2)
-            # get and show number of messages between time and date
-            num = dataFileUtils.getNumOfMessages()
-            if (num != numMessages):
-                updateScreen = True
-                numMessages = num
-            # only update the screen if there is data to update
-            if (updateScreen):
-                myLCD.clearScreen()
-                if (numMessages > 0):
-                    myLCD.displayWordAtPos(str(numMessages), 8)
-                myLCD.displayWordOnLine(currTime , 1)
-                myLCD.rightJustifyTextOnLine(date, 1)
-                myLCD.rightJustifyTextOnLine(wd.desc, 2)
-                myLCD.displayWordOnLine(str(int(round(wd.tempF))) + chr(223), 2)
-            updateIteration = updateIteration + 1
-            time.sleep(1)
-        else:
-            print "establishing connection..."
-            myLCD.getSerialConnection()
-            time.sleep(10)
-        #except:
-        #    print "Error writing to bluetooth"
-        #    myLCD.disconnect()
+                    myLCD.scrollTextLeftOnLine(showMessage, 1, 0.2)
+                # get and show number of messages between time and date
+                num = dataFileUtils.getNumOfMessages()
+                if (num != numMessages):
+                    updateScreen = True
+                    numMessages = num
+                # only update the screen if there is data to update
+                if (updateScreen):
+                    myLCD.clearScreen()
+                    if (numMessages > 0):
+                        myLCD.displayWordAtPos(str(numMessages), 8)
+                    myLCD.displayWordOnLine(currTime , 1)
+                    myLCD.rightJustifyTextOnLine(date, 1)
+                    myLCD.rightJustifyTextOnLine(wdDesc, 2)
+                    myLCD.displayWordOnLine(str(int(round(wdTempF))) + chr(223), 2)
+                updateIteration = updateIteration + 1
+                time.sleep(1)
+            else:
+                print "establishing connection..."
+                myLCD.getSerialConnection()
+                time.sleep(10)
+        except:
+            print "Error writing to bluetooth"
+            myLCD.disconnect()
 except:
     logging.exception("ERROR: ")
